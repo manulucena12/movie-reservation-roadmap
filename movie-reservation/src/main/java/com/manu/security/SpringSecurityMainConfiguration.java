@@ -9,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,49 +17,53 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-// This method is not final yet, it is mandatory to add a specific auth method, for the moment is HttpBasic only
+// This method is not final yet, it is mandatory to add a specific auth method, for the moment is
+// HttpBasic only
 public class SpringSecurityMainConfiguration {
 
-    @Autowired private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)
-            throws Exception{
-        return httpSecurity
-                .httpBasic(Customizer.withDefaults())
-                .authorizeHttpRequests(
-                        authorizationManagerRequestMatcherRegistry -> {
-                    authorizationManagerRequestMatcherRegistry
-                            .requestMatchers("/users").hasAuthority("show")
-                            .requestMatchers("/rooms").hasAuthority("movie")
-                            .requestMatchers(
-                                    "/swagger-ui/**",
-                                    "/configurations/ui",
-                                    "/configurations/security",
-                                    "/swagger-ui.html",
-                                    "/swagger-resources/**",
-                                    "/swagger-resources",
-                                    "/v3/api-docs",
-                                    "/v3/api-docs/**"
-                            ).permitAll()
-                            .anyRequest().denyAll();
-                })
-                .build();
-    }
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    return httpSecurity
+        .httpBasic(Customizer.withDefaults())
+        .csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(
+            authorizationManagerRequestMatcherRegistry -> {
+              authorizationManagerRequestMatcherRegistry
+                  .requestMatchers("/users")
+                  .hasAuthority("manager")
+                  .requestMatchers("/rooms/**")
+                  .hasAuthority("manager")
+                  .requestMatchers(
+                      "/swagger-ui/**",
+                      "/configurations/ui",
+                      "/configurations/security",
+                      "/swagger-ui.html",
+                      "/swagger-resources/**",
+                      "/swagger-resources",
+                      "/v3/api-docs",
+                      "/v3/api-docs/**")
+                  .permitAll()
+                  .anyRequest()
+                  .denyAll();
+            })
+        .build();
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
-    public UserDetailsService userDetailsService(){
-        return email -> {
-            var storedUser = userRepository
-                    .findByEmail(email)
-                    .orElseThrow(() -> new BadCredentialsException("Wrong Credentials"));
-            return new JpaUserDetails(storedUser);
-        };
-    }
-
+  @Bean
+  public UserDetailsService userDetailsService() {
+    return email -> {
+      var storedUser =
+          userRepository
+              .findByEmail(email)
+              .orElseThrow(() -> new BadCredentialsException("Wrong Credentials"));
+      return new JpaUserDetails(storedUser);
+    };
+  }
 }
