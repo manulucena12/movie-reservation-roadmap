@@ -86,6 +86,11 @@ public class RoomController {
   @Operation(
       summary = "Creates a room",
       description = "It allows the admin to create a new room for the cinema",
+      requestBody =
+          @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "Payload containing user registration details.",
+              required = true,
+              content = @Content(schema = @Schema(implementation = NewRoomRequest.class))),
       responses = {
         @ApiResponse(
             responseCode = "201",
@@ -93,7 +98,8 @@ public class RoomController {
             content =
                 @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = UserEntity.class, type = "array"))),
+                    schema = @Schema(implementation = UserEntity.class))),
+        @ApiResponse(responseCode = "400", description = "Wrong data provided or name taken"),
         @ApiResponse(responseCode = "401", description = "Authentication not provided/failed"),
         @ApiResponse(
             responseCode = "403",
@@ -143,6 +149,35 @@ public class RoomController {
     return ResponseEntity.status(response.getStatusCode()).body(response.getMessage());
   }
 
+  @Operation(
+      summary = "Updates a room",
+      description = "It allows the admin to update a room",
+      requestBody =
+          @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "Payload containing the room details.",
+              required = true,
+              content = @Content(schema = @Schema(implementation = UpdateRoomRequest.class))),
+      responses = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Room update successfully",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = UserEntity.class))),
+        @ApiResponse(responseCode = "400", description = "Room not found"),
+        @ApiResponse(responseCode = "401", description = "Authentication not provided/failed"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Authentication succeeded but not authorized"),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(example = "Internal Server Error")))
+      })
   @PutMapping("/{id}")
   public ResponseEntity<Object> updateRoom(
       @PathVariable Long id, @RequestBody UpdateRoomRequest request) {

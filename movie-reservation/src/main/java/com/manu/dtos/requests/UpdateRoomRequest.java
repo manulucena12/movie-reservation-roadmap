@@ -11,4 +11,8 @@ public class UpdateRoomRequest {
   public void setUnavailable(int unavailable) {
     this.unavailable = unavailable;
   }
+
+  public UpdateRoomRequest(int unavailable) {
+    this.unavailable = unavailable;
+  }
 }

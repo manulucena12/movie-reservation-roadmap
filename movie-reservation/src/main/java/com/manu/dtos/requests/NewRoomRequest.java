@@ -31,4 +31,10 @@ public class NewRoomRequest {
   public void setName(String name) {
     this.name = name;
   }
+
+  public NewRoomRequest(String name, int seats, Optional<Integer> unavailable) {
+    this.name = name;
+    this.seats = seats;
+    this.unavailable = unavailable;
+  }
 }
