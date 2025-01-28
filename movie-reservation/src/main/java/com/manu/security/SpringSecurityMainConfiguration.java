@@ -31,9 +31,7 @@ public class SpringSecurityMainConfiguration {
         .authorizeHttpRequests(
             authorizationManagerRequestMatcherRegistry -> {
               authorizationManagerRequestMatcherRegistry
-                  .requestMatchers("/users")
-                  .hasAuthority("manager")
-                  .requestMatchers("/rooms/**")
+                  .requestMatchers("/users", "/rooms/**", "/movies/**")
                   .hasAuthority("manager")
                   .requestMatchers(
                       "/swagger-ui/**",

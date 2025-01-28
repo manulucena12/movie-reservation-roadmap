@@ -38,20 +38,15 @@ public class RoomService {
 
   public HttpCustomResponse<Object> createRoom(NewRoomRequest body) {
     try {
-      if (body.getSeats() == 0) {
+      if (body.getRows() * body.getColums() == 0) {
         return new HttpCustomResponse<>(400, null, "You cannot create a room with 0 seats");
       }
       if (roomRepository.findByName(body.getName()).isPresent()) {
         return new HttpCustomResponse<>(400, null, "This name is already taken");
       }
-      if (body.getUnavailable() == null) {
-        return new HttpCustomResponse<>(
-            201, roomRepository.save(new RoomEntity(body.getName(), body.getSeats(), 0)), null);
-      }
       return new HttpCustomResponse<>(
           201,
-          roomRepository.save(
-              new RoomEntity(body.getName(), body.getSeats(), body.getUnavailable().get())),
+          roomRepository.save(new RoomEntity(body.getName(), body.getRows(), body.getColums(), 0)),
           null);
     } catch (Exception e) {
       System.out.println(e);

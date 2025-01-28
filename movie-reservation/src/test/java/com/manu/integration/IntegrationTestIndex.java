@@ -6,7 +6,6 @@ import com.manu.entities.RoomEntity;
 import com.manu.entities.UserEntity;
 import com.manu.repositories.RoomRepository;
 import com.manu.repositories.UserRepository;
-import java.util.Optional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,7 +44,7 @@ public class IntegrationTestIndex {
         "Basic "
             + java.util.Base64.getEncoder()
                 .encodeToString(userCredentials.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-    var room = roomRepository.save(new RoomEntity("Room-Test-1", 30, 0));
+    var room = roomRepository.save(new RoomEntity("Room-Test-1", 5, 6, 0));
     roomId = room.getId();
   }
 
@@ -95,7 +94,7 @@ public class IntegrationTestIndex {
   @Test
   void createRoomGranted() {
     RoomIntegrationTests.createRoomGranted(
-        adminHeader, webTestClient, new NewRoomRequest("RT2", 30, Optional.of(0)));
+        adminHeader, webTestClient, new NewRoomRequest("RT2", 5, 6));
   }
 
   @DisplayName("Updating a room works properly")

@@ -1,27 +1,15 @@
 package com.manu.dtos.requests;
 
-import java.util.Optional;
-
 public class NewRoomRequest {
 
   private String name;
-  private int seats;
-  private Optional<Integer> unavailable;
+  private int rows;
+  private int colums;
 
-  public Optional<Integer> getUnavailable() {
-    return unavailable;
-  }
-
-  public void setUnavailable(Optional<Integer> unavailable) {
-    this.unavailable = unavailable;
-  }
-
-  public int getSeats() {
-    return seats;
-  }
-
-  public void setSeats(int seats) {
-    this.seats = seats;
+  public NewRoomRequest(String name, int rows, int colums) {
+    this.name = name;
+    this.rows = rows;
+    this.colums = colums;
   }
 
   public String getName() {
@@ -32,9 +20,19 @@ public class NewRoomRequest {
     this.name = name;
   }
 
-  public NewRoomRequest(String name, int seats, Optional<Integer> unavailable) {
-    this.name = name;
-    this.seats = seats;
-    this.unavailable = unavailable;
+  public int getRows() {
+    return rows;
+  }
+
+  public void setRows(int rows) {
+    this.rows = rows;
+  }
+
+  public int getColums() {
+    return colums;
+  }
+
+  public void setColums(int colums) {
+    this.colums = colums;
   }
 }
