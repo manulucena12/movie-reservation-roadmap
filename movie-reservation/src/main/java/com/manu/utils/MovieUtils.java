@@ -1,7 +1,9 @@
 package com.manu.utils;
 
 import com.manu.entities.MovieEntity;
+import com.manu.entities.RoomEntity;
 import com.manu.entities.SeatEntity;
+import com.manu.repositories.MovieRepository;
 import com.manu.repositories.SeatRepository;
 import java.util.List;
 
@@ -35,5 +37,30 @@ public class MovieUtils {
       }
     }
     return seats;
+  }
+
+  public static List<MovieEntity> createMovies(
+      List<Integer> days,
+      List<String> hours,
+      int minutes,
+      double price,
+      String month,
+      String name,
+      RoomEntity room,
+      MovieRepository movieRepository,
+      SeatRepository seatRepository) {
+    List<MovieEntity> movies = new java.util.ArrayList<>(List.of());
+    for (int i = 0; i < days.size(); i++) {
+      for (int j = 0; j < hours.size(); j++) {
+        var movie =
+            movieRepository.save(
+                new MovieEntity(name, room, month + ", " + days.get(i), hours.get(j), minutes));
+        var seats = createSeats(room.getRows(), room.getColums(), price, movie, seatRepository);
+        movie.setSeats(seats);
+        var newMovie = movieRepository.save(movie);
+        movies.add(newMovie);
+      }
+    }
+    return movies;
   }
 }

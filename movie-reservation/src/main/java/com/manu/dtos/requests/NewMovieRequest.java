@@ -9,13 +9,24 @@ public class NewMovieRequest {
   private double price;
   private String month;
   private List<Integer> days;
+  private List<String> hours;
+  private int minutes;
 
-  public NewMovieRequest(Long room, String name, double price, String month, List<Integer> days) {
+  public NewMovieRequest(
+      Long room,
+      String name,
+      double price,
+      String month,
+      List<Integer> days,
+      List<String> hours,
+      int minutes) {
     this.room = room;
     this.name = name;
     this.price = price;
     this.month = month;
     this.days = days;
+    this.hours = hours;
+    this.minutes = minutes;
   }
 
   public Long getRoom() {
@@ -56,5 +67,21 @@ public class NewMovieRequest {
 
   public void setDays(List<Integer> days) {
     this.days = days;
+  }
+
+  public List<String> getHours() {
+    return hours;
+  }
+
+  public void setHours(List<String> hours) {
+    this.hours = hours;
+  }
+
+  public int getMinutes() {
+    return minutes;
+  }
+
+  public void setMinutes(int minutes) {
+    this.minutes = minutes;
   }
 }

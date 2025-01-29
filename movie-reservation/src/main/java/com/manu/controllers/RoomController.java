@@ -2,6 +2,7 @@ package com.manu.controllers;
 
 import com.manu.dtos.requests.NewRoomRequest;
 import com.manu.dtos.requests.UpdateRoomRequest;
+import com.manu.entities.RoomEntity;
 import com.manu.entities.UserEntity;
 import com.manu.services.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +33,7 @@ public class RoomController {
             content =
                 @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = UserEntity.class, type = "array"))),
+                    schema = @Schema(implementation = RoomEntity.class, type = "array"))),
         @ApiResponse(responseCode = "401", description = "Authentication not provided/failed"),
         @ApiResponse(
             responseCode = "403",
@@ -62,7 +63,7 @@ public class RoomController {
             content =
                 @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = UserEntity.class))),
+                    schema = @Schema(implementation = RoomEntity.class))),
         @ApiResponse(responseCode = "400", description = "Room not found"),
         @ApiResponse(responseCode = "401", description = "Authentication not provided/failed"),
         @ApiResponse(
@@ -88,7 +89,7 @@ public class RoomController {
       description = "It allows the admin to create a new room for the cinema",
       requestBody =
           @io.swagger.v3.oas.annotations.parameters.RequestBody(
-              description = "Payload containing user registration details.",
+              description = "Payload containing room details.",
               required = true,
               content = @Content(schema = @Schema(implementation = NewRoomRequest.class))),
       responses = {

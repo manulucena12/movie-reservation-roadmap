@@ -24,15 +24,23 @@ public class MovieEntity {
   private String date;
 
   @Column(nullable = false)
+  private String schedule;
+
+  @Column(nullable = false)
+  private int minutes;
+
+  @Column(nullable = false)
   @OneToMany(mappedBy = "movie")
   private List<SeatEntity> seats;
 
   public MovieEntity() {}
 
-  public MovieEntity(String name, RoomEntity room, String date) {
+  public MovieEntity(String name, RoomEntity room, String date, String schedule, int minutes) {
     this.name = name;
     this.room = room;
     this.date = date;
+    this.schedule = schedule;
+    this.minutes = minutes;
   }
 
   public Long getId() {
@@ -73,5 +81,21 @@ public class MovieEntity {
 
   public void setDate(String date) {
     this.date = date;
+  }
+
+  public String getSchedule() {
+    return schedule;
+  }
+
+  public void setSchedule(String schedule) {
+    this.schedule = schedule;
+  }
+
+  public int getMinutes() {
+    return minutes;
+  }
+
+  public void setMinutes(int minutes) {
+    this.minutes = minutes;
   }
 }
