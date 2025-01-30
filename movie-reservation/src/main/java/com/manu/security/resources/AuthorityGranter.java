@@ -10,7 +10,9 @@ public class AuthorityGranter {
   public static Collection<? extends GrantedAuthority> giveAuthorities(String role) {
     return switch (role) {
       case "user" -> List.of(
-          new SimpleGrantedAuthority("buy"), new SimpleGrantedAuthority("cancel"));
+          new SimpleGrantedAuthority("buy"),
+          new SimpleGrantedAuthority("cancel"),
+          new SimpleGrantedAuthority("get"));
       case "admin" -> List.of(new SimpleGrantedAuthority("manager"));
       default -> List.of();
     };

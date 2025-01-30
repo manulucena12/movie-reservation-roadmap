@@ -5,6 +5,7 @@ import com.manu.security.resources.JpaUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,8 +32,14 @@ public class SpringSecurityMainConfiguration {
         .authorizeHttpRequests(
             authorizationManagerRequestMatcherRegistry -> {
               authorizationManagerRequestMatcherRegistry
-                  .requestMatchers("/users", "/rooms/**", "/movies/**")
+                  .requestMatchers("/users", "/rooms/**")
                   .hasAuthority("manager")
+                  .requestMatchers(HttpMethod.POST, "/movies/**")
+                  .hasAnyAuthority("manager")
+                  .requestMatchers(HttpMethod.PUT, "/movies/**")
+                  .hasAnyAuthority("manager")
+                  .requestMatchers(HttpMethod.GET, "/movies/**")
+                  .hasAnyAuthority("get", "manager")
                   .requestMatchers(
                       "/swagger-ui/**",
                       "/configurations/ui",

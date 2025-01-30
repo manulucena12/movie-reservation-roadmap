@@ -24,6 +24,8 @@ public class MovieReservationApplication {
   @PostConstruct
   void devUser() {
     userRepository.save(new UserEntity(0, "admin", passwordEncoder.encode(password), email));
+    userRepository.save(
+        new UserEntity(0, "user", passwordEncoder.encode(password), "user@gmail.com"));
     System.out.println("Dev user is available to use");
   }
 

@@ -1,6 +1,7 @@
 package com.manu.controllers;
 
-import com.manu.dtos.requests.NewMovieRequest;
+import com.manu.dtos.requests.*;
+import com.manu.dtos.responses.movies.MovieDto;
 import com.manu.entities.MovieEntity;
 import com.manu.entities.UserEntity;
 import com.manu.services.MovieService;
@@ -25,7 +26,7 @@ public class MovieController {
   @Autowired private MovieService movieService;
 
   @Operation(
-      summary = "Creates a list of movies with its seats",
+      summary = "Creates a list of movies with their seats",
       description = "It allows the admin to create a list of movies giving the schedule",
       requestBody =
           @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -106,7 +107,7 @@ public class MovieController {
       },
       summary = "Gets a single movie by date/name",
       description =
-          "It provides a single movie information to the all the users basing on its name",
+          "It provides a single movie information to the all the users basing on its name or date",
       responses = {
         @ApiResponse(
             responseCode = "200",
@@ -137,5 +138,112 @@ public class MovieController {
             : movieService.getMoviesByDate(date);
     return ResponseEntity.status(response.getStatusCode())
         .body(response.getStatusCode() == 200 ? response.getContent() : response.getMessage());
+  }
+
+  @Operation(
+      summary = "Updates a specific list of movies",
+      description =
+          "It allows the admin to update the name and minutes of the movies using the old name",
+      requestBody =
+          @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "Payload containing the old and new name and its minutes.",
+              required = true,
+              content =
+                  @Content(schema = @Schema(implementation = UpdateGeneralMovieInfoRequest.class))),
+      responses = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Movies updated successfully",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = MovieDto.class, type = "array"))),
+        @ApiResponse(responseCode = "400", description = "Movies not found"),
+        @ApiResponse(responseCode = "401", description = "Authentication not provided/failed"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Authentication succeeded but not authorized"),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(example = "Internal Server Error")))
+      })
+  @PutMapping("/all")
+  public ResponseEntity<Object> updateGeneralInfo(
+      @RequestBody UpdateGeneralMovieInfoRequest request) {
+    var response = movieService.updateGeneralInfo(request);
+    return ResponseEntity.status(response.getStatusCode())
+        .body(response.getStatusCode() == 200 ? response.getContent() : response.getMessage());
+  }
+
+  @Operation(
+      summary = "Updates a specific movie",
+      description = "It allows the admin to update the date and schedule of a single movie",
+      requestBody =
+          @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "Payload containing the old and new name and its minutes.",
+              required = true,
+              content =
+                  @Content(schema = @Schema(implementation = UpdateSpecificInfoRequest.class))),
+      responses = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Movie updated successfully",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = MovieDto.class))),
+        @ApiResponse(responseCode = "400", description = "Movies not found"),
+        @ApiResponse(responseCode = "401", description = "Authentication not provided/failed"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Authentication succeeded but not authorized"),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(example = "Internal Server Error")))
+      })
+  @PutMapping("/single")
+  public ResponseEntity<Object> updateSpecificInfo(@RequestBody UpdateSpecificInfoRequest request) {
+    var response = movieService.updateSpecificInfo(request);
+    return ResponseEntity.status(response.getStatusCode())
+        .body(response.getStatusCode() == 200 ? response.getContent() : response.getMessage());
+  }
+
+  @Operation(
+      summary = "Updates the prices of all movies of a day",
+      description = "It allows the admin to set a single price for a movies for a day",
+      requestBody =
+          @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "Payload containing the old and new name and its minutes.",
+              required = true,
+              content =
+                  @Content(schema = @Schema(implementation = UpdateSeatsPricesRequest.class))),
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Movies' prices updated successfully"),
+        @ApiResponse(responseCode = "400", description = "Movies not found"),
+        @ApiResponse(responseCode = "401", description = "Authentication not provided/failed"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Authentication succeeded but not authorized"),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(example = "Internal Server Error")))
+      })
+  @PutMapping("/prices")
+  public ResponseEntity<Object> updateDayPrices(
+      @RequestParam String date, @RequestBody UpdateSeatsPricesRequest request) {
+    var response = movieService.updateDayPrices(date, request);
+    return ResponseEntity.status(response.getStatusCode()).body(response.getMessage());
   }
 }
