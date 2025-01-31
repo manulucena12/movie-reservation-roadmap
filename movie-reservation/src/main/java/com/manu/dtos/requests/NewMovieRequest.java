@@ -7,7 +7,7 @@ public class NewMovieRequest {
   private Long room;
   private String name;
   private double price;
-  private String month;
+  private int month;
   private List<Integer> days;
   private List<String> hours;
   private int minutes;
@@ -16,7 +16,7 @@ public class NewMovieRequest {
       Long room,
       String name,
       double price,
-      String month,
+      int month,
       List<Integer> days,
       List<String> hours,
       int minutes) {
@@ -53,11 +53,11 @@ public class NewMovieRequest {
     this.price = price;
   }
 
-  public String getMonth() {
+  public int getMonth() {
     return month;
   }
 
-  public void setMonth(String month) {
+  public void setMonth(int month) {
     this.month = month;
   }
 

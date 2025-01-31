@@ -113,7 +113,7 @@ public class MovieService {
               movie.getId(),
               movie.getName(),
               movie.getSchedule(),
-              movie.getDate(),
+              movie.getDate().toString(),
               movie.getMinutes());
       return new HttpCustomResponse<>(200, movieDto, null);
     } catch (Exception e) {
@@ -136,6 +136,28 @@ public class MovieService {
       }
       return new HttpCustomResponse<>(
           200, null, "The prices for the day: " + date + " have been updated");
+    } catch (Exception e) {
+      System.out.println(e);
+      return new HttpCustomResponse<>(500, null, "Internal Server Error");
+    }
+  }
+
+  public HttpCustomResponse<Object> deleteOldMovies(String date) {
+    try {
+      var movies = movieRepository.findAllByDate(date);
+      if (movies.isEmpty()) {
+        return new HttpCustomResponse<>(400, null, "Movies not found");
+      }
+      if (MovieUtils.checkDateBefore(date)) {
+        return new HttpCustomResponse<>(
+            400, null, "You cannot delete movies that have not been streamed yet");
+      }
+      for (int i = 0; i < movies.size(); i++) {
+        movieRepository.deleteMovieSeats(movies.get(i).getId());
+      }
+      movieRepository.deleteAllByDate(date);
+      return new HttpCustomResponse<>(
+          200, null, "The movies dated in: " + date + " have been deleted");
     } catch (Exception e) {
       System.out.println(e);
       return new HttpCustomResponse<>(500, null, "Internal Server Error");

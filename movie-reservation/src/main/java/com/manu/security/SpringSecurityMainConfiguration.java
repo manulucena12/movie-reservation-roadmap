@@ -38,6 +38,8 @@ public class SpringSecurityMainConfiguration {
                   .hasAnyAuthority("manager")
                   .requestMatchers(HttpMethod.PUT, "/movies/**")
                   .hasAnyAuthority("manager")
+                  .requestMatchers(HttpMethod.DELETE, "/movies/**")
+                  .hasAnyAuthority("manager")
                   .requestMatchers(HttpMethod.GET, "/movies/**")
                   .hasAnyAuthority("get", "manager")
                   .requestMatchers(

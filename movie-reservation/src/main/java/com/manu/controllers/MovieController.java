@@ -116,7 +116,7 @@ public class MovieController {
                 @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = MovieEntity.class))),
-        @ApiResponse(responseCode = "400", description = "Room not found"),
+        @ApiResponse(responseCode = "400", description = "Movies not found"),
         @ApiResponse(responseCode = "401", description = "Authentication not provided/failed"),
         @ApiResponse(
             responseCode = "403",
@@ -244,6 +244,46 @@ public class MovieController {
   public ResponseEntity<Object> updateDayPrices(
       @RequestParam String date, @RequestBody UpdateSeatsPricesRequest request) {
     var response = movieService.updateDayPrices(date, request);
+    return ResponseEntity.status(response.getStatusCode()).body(response.getMessage());
+  }
+
+  @Operation(
+      parameters = {
+        @Parameter(
+            name = "date",
+            description = "Date of the movie",
+            required = true,
+            schema = @Schema(type = "string", example = "2023-10-15")),
+      },
+      summary = "Delete movies of a day using their date",
+      description = "It allows the admin to delete movies if they have been streamed",
+      responses = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Movies deleted successfully",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = MovieEntity.class))),
+        @ApiResponse(responseCode = "400", description = "Movies not found"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "It's not possible to delete movies before their stream"),
+        @ApiResponse(responseCode = "401", description = "Authentication not provided/failed"),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Authentication succeeded but not authorized"),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(example = "Internal Server Error")))
+      })
+  @DeleteMapping
+  public ResponseEntity<Object> deleteMoviesByDate(@RequestParam String date) {
+    var response = movieService.deleteOldMovies(date);
     return ResponseEntity.status(response.getStatusCode()).body(response.getMessage());
   }
 }

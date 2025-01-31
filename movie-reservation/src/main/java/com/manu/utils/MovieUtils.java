@@ -5,6 +5,7 @@ import com.manu.entities.RoomEntity;
 import com.manu.entities.SeatEntity;
 import com.manu.repositories.MovieRepository;
 import com.manu.repositories.SeatRepository;
+import java.time.LocalDate;
 import java.util.List;
 
 public class MovieUtils {
@@ -44,7 +45,7 @@ public class MovieUtils {
       List<String> hours,
       int minutes,
       double price,
-      String month,
+      int month,
       String name,
       RoomEntity room,
       MovieRepository movieRepository,
@@ -52,9 +53,13 @@ public class MovieUtils {
     List<MovieEntity> movies = new java.util.ArrayList<>(List.of());
     for (int i = 0; i < days.size(); i++) {
       for (int j = 0; j < hours.size(); j++) {
+        var year = LocalDate.now().getYear();
+        var monthNumber = month < 10 ? "0" + month : String.valueOf(month);
+        var dayNumber = days.get(i) < 10 ? "0" + days.get(i) : String.valueOf(days.get(i));
+        var date = LocalDate.of(year, Integer.parseInt(monthNumber), Integer.parseInt(dayNumber));
         var movie =
             movieRepository.save(
-                new MovieEntity(name, room, month + ", " + days.get(i), hours.get(j), minutes));
+                new MovieEntity(name, room, date.toString(), hours.get(j), minutes));
         var seats = createSeats(room.getRows(), room.getColums(), price, movie, seatRepository);
         movie.setSeats(seats);
         var newMovie = movieRepository.save(movie);
@@ -62,5 +67,14 @@ public class MovieUtils {
       }
     }
     return movies;
+  }
+
+  public static boolean checkDateBefore(String date) {
+    var today = LocalDate.now();
+    String year = date.substring(0, 4);
+    String month = date.substring(5, 7);
+    String day = date.substring(8);
+    return today.isBefore(
+        LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)));
   }
 }

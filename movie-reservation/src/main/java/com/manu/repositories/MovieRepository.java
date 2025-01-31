@@ -36,4 +36,14 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
   @Query(nativeQuery = true, value = "UPDATE seats SET price = ?1 WHERE movie = ?2")
   @Transactional
   void updatePriceById(double price, Long id);
+
+  @Modifying
+  @Query(nativeQuery = true, value = "DELETE movies WHERE date = ?1")
+  @Transactional
+  void deleteAllByDate(String date);
+
+  @Modifying
+  @Query(nativeQuery = true, value = "DELETE seats WHERE movie = ?1")
+  @Transactional
+  void deleteMovieSeats(Long id);
 }
