@@ -25,6 +25,10 @@ public class SeatEntity {
   @JsonIgnore
   private MovieEntity movie;
 
+  @OneToOne(mappedBy = "seat")
+  @JsonIgnore
+  private TicketEntity ticket;
+
   public SeatEntity() {}
 
   public SeatEntity(String name, double price, boolean available, MovieEntity movie) {
@@ -72,5 +76,13 @@ public class SeatEntity {
 
   public void setMovie(MovieEntity movie) {
     this.movie = movie;
+  }
+
+  public TicketEntity getTicket() {
+    return ticket;
+  }
+
+  public void setTicket(TicketEntity ticket) {
+    this.ticket = ticket;
   }
 }

@@ -2,6 +2,7 @@ package com.manu.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -23,6 +24,9 @@ public class UserEntity {
 
   @Column(nullable = false)
   private double balance;
+
+  @OneToMany(mappedBy = "owner")
+  private List<TicketEntity> tickets;
 
   public UserEntity(double balance, String role, String password, String email) {
     this.balance = balance;
