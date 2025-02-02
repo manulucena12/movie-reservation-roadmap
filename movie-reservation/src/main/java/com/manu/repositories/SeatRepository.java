@@ -14,4 +14,9 @@ public interface SeatRepository extends JpaRepository<SeatEntity, Long> {
   @Query(nativeQuery = true, value = "UPDATE seats SET available = false WHERE id = ?1")
   @Transactional
   void updateDisponibilityById(Long id);
+
+  @Modifying
+  @Query(nativeQuery = true, value = "UPDATE seats SET available = true WHERE id = ?1")
+  @Transactional
+  void cancelSeatById(Long id);
 }
