@@ -13,4 +13,8 @@ public class CancelSeatsRequest {
   public void setTickets(List<Long> tickets) {
     this.tickets = tickets;
   }
+
+  public CancelSeatsRequest(List<Long> tickets) {
+    this.tickets = tickets;
+  }
 }

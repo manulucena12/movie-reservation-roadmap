@@ -13,4 +13,8 @@ public class BookSeatsRequest {
   public void setSeats(List<Long> seats) {
     this.seats = seats;
   }
+
+  public BookSeatsRequest(List<Long> seats) {
+    this.seats = seats;
+  }
 }

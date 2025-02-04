@@ -24,7 +24,9 @@ public class TicketService {
           userRepository
               .findByEmail(userEmail)
               .orElseThrow(() -> new ResourceNotFoundException("Nothing"));
-      return new HttpCustomResponse<>(200, ticketRepository.findByOwner(user.getId()), null);
+      var tickets = ticketRepository.findByOwner(user.getId());
+      return new HttpCustomResponse<>(
+          200, tickets.size() == 1 ? tickets.getFirst() : tickets, null);
     } catch (Exception e) {
       if (e instanceof ResourceNotFoundException) {
         return new HttpCustomResponse<>(400, null, "User not found");

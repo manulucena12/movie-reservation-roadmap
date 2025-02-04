@@ -153,6 +153,7 @@ public class MovieService {
             400, null, "You cannot delete movies that have not been streamed yet");
       }
       for (int i = 0; i < movies.size(); i++) {
+        movieRepository.deleteMovieTickets(movies.getFirst().getName());
         movieRepository.deleteMovieSeats(movies.get(i).getId());
       }
       movieRepository.deleteAllByDate(date);

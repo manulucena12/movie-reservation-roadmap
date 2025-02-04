@@ -18,8 +18,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-// This method is not final yet, it is mandatory to add a specific auth method, for the moment is
-// HttpBasic only
 public class SpringSecurityMainConfiguration {
 
   @Autowired private UserRepository userRepository;

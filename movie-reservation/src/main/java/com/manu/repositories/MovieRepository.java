@@ -46,4 +46,9 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
   @Query(nativeQuery = true, value = "DELETE seats WHERE movie = ?1")
   @Transactional
   void deleteMovieSeats(Long id);
+
+  @Modifying
+  @Query(nativeQuery = true, value = "DELETE tickets WHERE movie = ?1")
+  @Transactional
+  void deleteMovieTickets(String name);
 }
