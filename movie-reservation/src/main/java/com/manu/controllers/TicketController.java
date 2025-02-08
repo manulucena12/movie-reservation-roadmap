@@ -3,6 +3,8 @@ package com.manu.controllers;
 import com.manu.entities.MovieEntity;
 import com.manu.services.TicketService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -47,6 +49,12 @@ public class TicketController {
                     mediaType = "application/json",
                     schema = @Schema(example = "Internal Server Error")))
       })
+  @Parameter(
+      name = "User-Info",
+      description = "User's email to identify the account",
+      required = true,
+      in = ParameterIn.HEADER,
+      schema = @Schema(type = "string"))
   @GetMapping
   public ResponseEntity<Object> getUserTickets(HttpServletRequest request) {
     var userEmail = request.getHeader("User-Info");

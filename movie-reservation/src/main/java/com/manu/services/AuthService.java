@@ -7,6 +7,7 @@ import com.manu.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,8 @@ public class AuthService {
                       userCredentials.getBytes(java.nio.charset.StandardCharsets.UTF_8));
       return new HttpCustomResponse<>(200, userToken, null);
     } catch (Exception e) {
-      if (e instanceof BadCredentialsException) {
+      if (e instanceof BadCredentialsException
+          || e instanceof InternalAuthenticationServiceException) {
         return new HttpCustomResponse<>(400, null, "Bad credentials");
       }
       System.out.println(e);

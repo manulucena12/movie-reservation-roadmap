@@ -5,6 +5,8 @@ import com.manu.dtos.requests.CancelSeatsRequest;
 import com.manu.entities.TicketEntity;
 import com.manu.services.SeatService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -55,6 +57,12 @@ public class SeatController {
                     mediaType = "application/json",
                     schema = @Schema(example = "Internal Server Error")))
       })
+  @Parameter(
+      name = "User-Info",
+      description = "User's email to identify the account",
+      required = true,
+      in = ParameterIn.HEADER,
+      schema = @Schema(type = "string"))
   @PostMapping
   public ResponseEntity<Object> bookSeats(
       @RequestBody BookSeatsRequest body, HttpServletRequest request) {
@@ -100,6 +108,12 @@ public class SeatController {
                     mediaType = "application/json",
                     schema = @Schema(example = "Internal Server Error")))
       })
+  @Parameter(
+      name = "User-Info",
+      description = "User's email to identify the account",
+      required = true,
+      in = ParameterIn.HEADER,
+      schema = @Schema(type = "string"))
   @PostMapping("/cancel")
   public ResponseEntity<Object> cancelSeats(
       @RequestBody CancelSeatsRequest body, HttpServletRequest request) {

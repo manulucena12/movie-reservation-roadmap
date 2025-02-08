@@ -44,9 +44,7 @@ public class SpringSecurityMainConfiguration {
                   .hasAnyAuthority("manager")
                   .requestMatchers(HttpMethod.GET, "/movies/**")
                   .hasAnyAuthority("get", "manager")
-                  .requestMatchers("/tickets/**")
-                  .authenticated()
-                  .requestMatchers("/seats/**")
+                  .requestMatchers("/tickets/**", "/seats/**", "/balance")
                   .authenticated()
                   .requestMatchers(
                       "/swagger-ui/**",
